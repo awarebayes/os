@@ -1,11 +1,3 @@
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/ipc.h>
-#include <sys/sem.h>
-#include <sys/types.h>
-#include <unistd.h>
-
 
 /*
  * Producer - Consumer Problem
@@ -16,6 +8,14 @@
  * Обязательно создать НАБОР семафоров
  * Алгоритм дейкстры. Использовать 3 семафора. Два семафора должны быть бинарными, третий - счетчик
  */
+
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 const int N = 128; // размер буфера
 char *buffer_alloc; // Буфер
@@ -32,7 +32,9 @@ const int sb = 2; // бинарный семафор
 
 /*
  * P(S) - операция "взять", декремент. Если S <= 0, то процесс блокируется
+ * Аналог - sembuf {id, -1, 0};
  * V(S) - операция "положить", инкремент. Если S был <= 0, то процесс разблокируется
+ * Аналог - sembuf {id, 1, 0};
  */
 
 _Noreturn void producer()

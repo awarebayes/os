@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e" pages="2">
     <diagram id="C5RBs43oDa-KdzZeNtuy" name="int8h_1">
-        <mxGraphModel dx="569" dy="596" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="599" dy="626" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="WIyWlLk6GJQsqaUBKTNV-0"/>
                 <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0"/>
@@ -285,7 +285,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="yinVloLyn2REaArHDQql" name="sub_2">
-        <mxGraphModel dx="569" dy="-1742" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="599" dy="-1712" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="dQab6JG4eKId4dH5oYdf-0"/>
                 <mxCell id="dQab6JG4eKId4dH5oYdf-1" parent="dQab6JG4eKId4dH5oYdf-0"/>
@@ -325,7 +325,7 @@
                 <mxCell id="jFwJs0m698Z6FhEF0ztB-5" value="&lt;span style=&quot;font-size: 14px&quot;&gt;Загрузка содержимого младшего байта регистра EFLAGS в AH&lt;/span&gt;" style="whiteSpace=wrap;html=1;strokeWidth=2;" parent="dQab6JG4eKId4dH5oYdf-1" vertex="1">
                     <mxGeometry x="292.5" y="2650" width="180" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="Cjq-Raa330ExkD3VAx4A-1" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;rounded=0;" edge="1" parent="dQab6JG4eKId4dH5oYdf-1" source="jFwJs0m698Z6FhEF0ztB-6" target="jFwJs0m698Z6FhEF0ztB-1">
+                <mxCell id="Cjq-Raa330ExkD3VAx4A-1" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;rounded=0;" parent="dQab6JG4eKId4dH5oYdf-1" source="jFwJs0m698Z6FhEF0ztB-6" target="jFwJs0m698Z6FhEF0ztB-1" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="230" y="3066"/>
@@ -337,7 +337,7 @@
                 <mxCell id="jFwJs0m698Z6FhEF0ztB-6" value="&lt;span style=&quot;font-size: 14px&quot;&gt;Запрет маскируемых прерываний инструкцией CLI&lt;/span&gt;" style="whiteSpace=wrap;html=1;strokeWidth=2;" parent="dQab6JG4eKId4dH5oYdf-1" vertex="1">
                     <mxGeometry x="140" y="2870" width="180" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="Cjq-Raa330ExkD3VAx4A-0" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="dQab6JG4eKId4dH5oYdf-1" source="jFwJs0m698Z6FhEF0ztB-7" target="jFwJs0m698Z6FhEF0ztB-8">
+                <mxCell id="Cjq-Raa330ExkD3VAx4A-0" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="dQab6JG4eKId4dH5oYdf-1" source="jFwJs0m698Z6FhEF0ztB-7" target="jFwJs0m698Z6FhEF0ztB-8" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="jFwJs0m698Z6FhEF0ztB-7" value="&lt;span style=&quot;font-size: 14px&quot;&gt;Сброс флага разрешения прерывания IF в 0040:0314&lt;/span&gt;" style="whiteSpace=wrap;html=1;strokeWidth=2;" parent="dQab6JG4eKId4dH5oYdf-1" vertex="1">

@@ -1,12 +1,12 @@
 /*
  * Reader - Writer / Читатель - Писатель
  * Монитор Хоара
+ * Работает на переменой типа int которую он инкрементирует
  * 4 фукнции:
  * - StartRead - начало чтения
  * - StopRead - конец чтения
  * - StartWrite - начало записи
  * - StopWrite - конец записи
- *
  */
 
 
@@ -23,16 +23,18 @@ const int n_writers = 3;
 // Монитор Хоара
 sem_t c_read; // Можно читать
 sem_t c_write; // Можно писать
+
+// это нужно вынести в семафоры
 int nr = 0; // Количество читателей
-bool wrt = false; // is busy writing
 int read_requests = 0; // запросы на чтение
+bool wrt = false; // is busy writing
 
 int value = 0; // значение
 
 void start_write()
 {
 	// если уже есть писатель, или есть активные читатели
-	if (wrt || nr != 0)
+	if (wrt || nr > 0)
 	{
 		sem_wait(&c_write);
 	}
@@ -69,24 +71,26 @@ void stop_read()
 		sem_post(&c_write);
 }
 
-_Noreturn void reader()
+_Noreturn void reader(void *thid)
 {
+	int thid_int = thid;
 	while (true)
 	{
 		start_read();
-		printf("Reader is reading: %d\n", value);
+		printf("Reader %d reads:  %d\n", thid_int, value);
 		stop_read();
-		sleep(0.5);
+		sleep(1);
 	}
 }
 
-_Noreturn void writer()
+_Noreturn void writer(void *thid)
 {
+	int thid_int = (int)thid;
 	while (true)
 	{
 		start_write();
 		value++;
-		printf("Writer is writing: %d\n", value);
+		printf("Writer %d writes: %d\n", thid_int, value);
 		stop_write();
 		sleep(1);
 	}
@@ -114,7 +118,7 @@ int main() {
 	pthread_t writer_threads[n_writers];
 	for (int i = 0; i < n_readers; i++)
 	{
-		if ((pthread_create(&reader_threads[i], NULL, reader, NULL)) != 0)
+		if ((pthread_create(&reader_threads[i], NULL, reader, i)) != 0)
 		{
 			perror("pthread_create");
 			exit(1);
@@ -123,7 +127,7 @@ int main() {
 
 	for (int i = 0; i < n_writers; i++)
 	{
-		if ((pthread_create(&writer_threads[i], NULL, writer, NULL)) != 0)
+		if ((pthread_create(&writer_threads[i], NULL, writer, i)) != 0)
 		{
 			perror("pthread_create");
 			exit(1);

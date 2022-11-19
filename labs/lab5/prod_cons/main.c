@@ -30,6 +30,26 @@ const int se = 0; // число пустых ячеек в буфере
 const int sf = 1; // число заполненных ячеек в буфере
 const int sb = 2; // бинарный семафор
 
+struct sembuf wait_producer[2] = {
+	{se, -1, 0}, // ждем, пока не освободится место в буфере
+	{sb, -1, 0}  // ждем, пока не освободится бинарный семафор
+};
+
+struct sembuf signal_producer[2] = {
+	{sb, 1, 0}, // освобождаем бинарный семафор
+	{sf, 1, 0} // увеличиваем число заполненных ячеек в буфере
+};
+
+struct sembuf wait_consumer[2] = {
+	{sf, -1, 0}, // ждем, пока не появится хотя бы одна заполненная ячейка в буфере
+	{sb, -1, 0}  // ждем, пока не освободится бинарный семафор
+};
+
+struct sembuf signal_consumer[2] = {
+	{sb, 1, 0}, // освобождаем бинарный семафор
+	{se, 1, 0}  // увеличиваем число пустых ячеек в буфере
+};
+
 /*
  * P(S) - операция "взять", декремент. Если S <= 0, то процесс блокируется
  * Аналог - sembuf {id, -1, 0};
@@ -41,30 +61,19 @@ _Noreturn void producer()
 {
 	while (1)
 	{
-		// ждем, пока не освободится место в буфере
-		struct sembuf wait_empty = {se, -1, 0};
-		semop(semid, &wait_empty, 1);
 
-		// ждем, пока не освободится бинарный семафор
-		struct sembuf wait_bin = {sb, -1, 0};
-		semop(semid, &wait_bin, 1);
+		semop(semid, &wait_producer, 2);
 
 		// записываем букву в буфер
-		char *next_buffer = buffer_write + 1;
-		*next_buffer = *buffer_write + 1;
-		if (*next_buffer > 'Z')
-			*next_buffer = 'A';
-		if (next_buffer - buffer_alloc == N)
-			next_buffer = buffer_alloc;
-		buffer_write = next_buffer;
+		char *next_item = buffer_write + 1;
+		*next_item = *buffer_write + 1;
+		if (*next_item > 'Z')
+			*next_item = 'A';
+		if (next_item - buffer_alloc == N)
+			next_item = buffer_alloc;
+		buffer_write = next_item;
 
-		// освобождаем бинарный семафор
-		struct sembuf signal_bin = {sb, 1, 0};
-		semop(semid, &signal_bin, 1);
-
-		// увеличиваем число заполненных ячеек в буфере
-		struct sembuf signal_full = {sf, 1, 0};
-		semop(semid, &signal_full, 1);
+		semop(semid, &signal_producer, 2);
 	}
 }
 
@@ -72,28 +81,16 @@ _Noreturn void consumer()
 {
 	while (1)
 	{
-		// ждем, пока не появится хотя бы одна заполненная ячейка в буфере
-		struct sembuf wait_full = {sf, -1, 0};
-		semop(semid, &wait_full, 1);
-
-		// ждем, пока не освободится бинарный семафор
-		struct sembuf wait_bin = {sb, -1, 0};
-		semop(semid, &wait_bin, 1);
+		semop(semid, &wait_consumer, 2);
 
 		// читаем букву из буфера
 		printf("%c", *buffer_read);
+		fflush(stdout);
 		buffer_read++;
 		if (buffer_read - buffer_alloc == N)
 			buffer_read = buffer_alloc;
-		fflush(stdout);
-
-		// освобождаем бинарный семафор
-		struct sembuf signal_bin = {sb, 1, 0};
-		semop(semid, &signal_bin, 1);
-
-		// увеличиваем число пустых ячеек в буфере
-		struct sembuf signal_empty = {se, 1, 0};
-		semop(semid, &signal_empty, 1);
+		
+		semop(semid, &signal_consumer, 2);
 	}
 }
 
@@ -147,8 +144,6 @@ int main() {
 	buffer_read = buffer_alloc;
 	*buffer_alloc = 'A';
 
-	// Создаем мьютекс
-
 	// создаем тред-производителя
 	pthread_t producer_threads[n_prod];
 	for (int i = 0; i < n_prod; i++)
@@ -188,7 +183,6 @@ int main() {
 			exit(1);
 		}
 	}
-
 
 	return 0;
 }
